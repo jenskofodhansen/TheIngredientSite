@@ -1,0 +1,5 @@
+eclipse.preferences.version=1
+encoding//TheIngredientSite/migrations/0001_initial.py=utf-8
+encoding//TheIngredientSite/migrations/0002_ingredient_url.py=utf-8
+encoding//TheIngredientSite/migrations/0003_auto_20150307_1518.py=utf-8
+encoding//TheIngredientSite/migrations/0004_associative_tag.py=utf-8
