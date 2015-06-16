@@ -1,0 +1,151 @@
+{% load staticfiles %}
+
+<!DOCTYPE html>
+<html lang="en" class="full">
+	<head>
+		<meta charset="utf-8">
+	    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+	    <meta name="viewport" content="width=device-width, initial-scale=1">	
+	    <meta name="description" content="The web-site for all regarding food and ingredients">
+		<meta name="author" content="Jens Kofod Hansen">
+		
+		<title>TheIngredientSite.com</title>
+		
+		<!-- jQuery main -->
+		<script src="//code.jquery.com/jquery-1.11.2.min.js"></script>	
+				
+		<!-- jQuery UI -->
+		<script src="//code.jquery.com/ui/1.11.3/jquery-ui.min.js"></script>					
+		<link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.3/themes/smoothness/jquery-ui.css" />		
+		
+		<!-- bootstrap -->
+		<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+		<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css" rel="stylesheet">		
+		
+		<!-- tag cloud -->
+		<script src="{% static "TheIngredientSite/js/bootstrap-tag-cloud.js" %}"></script>
+		<link href="{% static "TheIngredientSite/css/bootstrap-tag-cloud.css" %}" rel="stylesheet">		
+		
+		<!-- custom CSS -->
+		<link href="{% static "TheIngredientSite/css/custom.css" %}" rel="stylesheet">		
+
+		<script src="{% static "TheIngredientSite/js/script.js" %}"></script>
+	</head>
+	
+	<body>
+		<div class = "container" style="background: none;">
+		{% if ingredient_name %}
+			<div class="row">
+				<div class="jumbotron" style="background-image: url({{bg_image}}); background-size: cover;"><h1 id="ingredient_name">{{ingredient_name}}</h1></div>
+			</div>
+			
+			<div class="row">
+				<div class="col-sm-11">
+					<div class="input-group">
+						 <span class="input-group-addon">Search ingredient:</span>
+						 <input id="search_ingredient" type="text" class="form-control" placeholder="Ingredient">
+					</div>
+				</div>
+				<div class="col-sm-1">
+					<div>
+						<input id="search" type="button" class="btn btn-primary pull-right" value="go" >
+					</div>
+				</div>
+			</div>
+			
+			<div class="row" style="margin-top: 28px">
+			</div>
+			
+			<!--div class="row">
+				<div id = "results"> 
+				{% for image in wiki_image_urls %}
+					<img src="{{ image }}" width="30%"/>
+				{% endfor %}
+				</div>
+			</div -->
+				
+			<div class="row">
+				<div class="well">
+					{% if related_ingredients %}
+						<h3>{{ingredient_name}} goes well with:</h3>
+						<ul class="nav nav-pills">
+						    {% for item in related_ingredients %}
+						        <li><a href="{% url 'TheIngredientSite:ingredient' item.ingredient_name %}">{{ item.ingredient_name }}</a></li>
+						    {% endfor %}
+				    	</ul>
+			    
+					{% else %}
+				    	<p>No ingredients are available.</p>
+					{% endif %}
+				</div>
+			</row>
+			
+			
+			<div class="row">
+				<!-- ASSOCIATION TAGS -->
+				<div class="col-sm-4">
+					<div class="panel panel-primary">
+						<div class="panel-heading">
+							Associations
+						</div>
+						<div class="panel-body">
+						    <div id="tag-info" class="input-append">
+							    <input class="form-control" type="text">
+							    <button class="btn btn-primary" type="button">Add<i class="icon-plus"></i></button>
+						    </div>
+						    <ul id="tag-cloud">
+						    {% if association_tags %}
+						    	{% for tag in association_tags%}
+						    	<li class="tag-cloud tag-cloud-info">{{ tag.association }}</li>
+						    	{% endfor %}
+						    {% endif %}
+						    </ul>
+					    </div>
+					</div>
+				</div>
+				<!-- FROM WIKIPEDIA -->
+				<div class="col-sm-4">
+					<div class="panel panel-primary">
+						<div class="panel-heading">
+							From Wikipedia
+						</div>
+						<div class="panel-body" id="wikipedia">
+						    {{ wiki_summary }}
+					    </div>
+					    <div class="panel-footer">
+					    <a href="{{wiki_link}}">Read more on Wikipedia</a>
+					    </div>
+					</div>
+				</div>
+				
+				<!-- USED IN RECIPES -->
+				{% if used_in_recipes %}
+				<div class="col-sm-4">
+					<div class="list-group">
+						<div class="list-group-item active">Recipes with <strong>{{ingredient_name}}</strong>:</div>
+						{% for recipe in used_in_recipes %}
+				        <div class="list-group-item"><a href="{{recipe.url}}">{{ recipe.recipe }}</a></div>				    	
+					    {% endfor %}
+				    </div>
+				</div>
+				{% else %}
+			    <p>No recipes are available.</p>		
+				{% endif %}
+			</div>
+			
+			
+		{% else %}
+			No ingredient found
+		{% endif %}
+		</div>
+		
+		<script >
+			$("#search").click(function(){
+		      	var ingredient_name = $("#search_ingredient").val();
+		      	var link = "/ingredient/" + ingredient_name;
+		      	console.log("link = " + link)
+		    	window.location.href = link;
+		    });
+		</script>
+	</body>
+</html>
